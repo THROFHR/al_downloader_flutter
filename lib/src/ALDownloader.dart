@@ -24,7 +24,7 @@ class ALDownloader {
       _addIsolateNameServerPortService();
 
       // Extract all current tasks from database and execute the tasks that need to be executed.
-      await _loadAndTryToRunTask();
+      // await _loadAndTryToRunTask();
 
       // a dirty flag that guarantees that this scope is executed only once
       _isInitial = true;
@@ -41,7 +41,7 @@ class ALDownloader {
   ///
   /// It is an one-off interface which will be destroyed when the download succeeded/failed.
   static Future<void> download(String? url,
-      {ALDownloaderHandlerInterface? downloaderHandlerInterface}) async {
+      {ALDownloaderHandlerInterface? downloaderHandlerInterface, showNotification = false, openFileFromNotification: false}) async {
     if (url == null) throw "ALDownloader | download error = url is null";
 
     if (downloaderHandlerInterface != null) {
@@ -79,8 +79,8 @@ class ALDownloader {
           url: url,
           savedDir: dir,
           fileName: alDownloaderPathComponentModel.fileName,
-          showNotification: false,
-          openFileFromNotification: false);
+          showNotification: showNotification,
+          openFileFromNotification: openFileFromNotification);
 
       if (taskId != null)
         _addTaskOrUpdateTaskForUrl(
@@ -495,7 +495,11 @@ class ALDownloader {
     debugPrint(
         "ALDownloader | final | _downloadCallback, taskId = $taskId, url = $url, innerStatus = $innerStatus, progress = $progress, double_progress = $double_progress");
   }
-
+  static Future loadTasks () async {
+    final tasks = await FlutterDownloader.loadTasks();
+    return tasks;
+  }
+  static const loadAndTryToRunTask = _loadAndTryToRunTask;
   /// Load [FlutterDownloader]'s local database task to the memory cache, and attempt to execute the tasks
   static Future<void> _loadAndTryToRunTask() async {
     final tasks = await FlutterDownloader.loadTasks();
