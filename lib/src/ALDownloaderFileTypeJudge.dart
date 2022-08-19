@@ -32,7 +32,7 @@ class ALDownloaderFileTypeJudge {
     }
     Uri u = Uri.parse(url);
     String extInfo = u.path.split('/').last.split('.').last;
-    var ext = extInfo.isEmpty ? anExtension : extInfo;
+    var ext = extInfo.isEmpty ? anExtension : ".$extInfo";
     return ALDownloaderFileTypeModel(ALDownloaderFileType.unknown, ext);
   }
 
