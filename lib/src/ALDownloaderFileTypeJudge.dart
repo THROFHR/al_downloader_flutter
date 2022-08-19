@@ -30,8 +30,10 @@ class ALDownloaderFileTypeJudge {
             "ALDownloader | getALDownloaderFileTypeModelFromUrl, type = $type, error = $error");
       }
     }
-
-    return ALDownloaderFileTypeModel(ALDownloaderFileType.unknown, anExtension);
+    Uri u = Uri.parse(url);
+    String extInfo = u.path.split('/').last.split('.').last;
+    var ext = extInfo.isEmpty ? anExtension : extInfo;
+    return ALDownloaderFileTypeModel(ALDownloaderFileType.unknown, ext);
   }
 
   /// A set of key-value pairs which type and type list
